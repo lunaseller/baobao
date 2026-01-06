@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JobTemp - Plateforme de recrutement de jobs temporaires en France</title>
+    <!-- 引入Tailwind CSS简化样式 -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- 引入Font Awesome图标库 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* 自定义hover动画效果 */
+        .job-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .job-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+        }
+        .btn-primary {
+            transition: background-color 0.3s ease;
+        }
+        /* 法国风格主色调：蓝白红（法兰西配色） */
+        :root {
+            --france-blue: #0055A4;
+            --france-white: #FFFFFF;
+            --france-red: #EF4135;
+        }
+        .bg-france-blue {
+            background-color: var(--france-blue);
+        }
+        .text-france-blue {
+            color: var(--france-blue);
+        }
+        .border-france-blue {
+            border-color: var(--france-blue);
+        }
+        .bg-france-red {
+            background-color: var(--france-red);
+        }
+        .text-france-red {
+            color: var(--france-red);
+        }
+    </style>
+</head>
+<body class="bg-gray-50 font-sans text-gray-800">
+    <!-- 顶部导航栏 (法国风格：蓝白主调) -->
+    <header class="bg-white shadow-sm sticky top-0 z-50">
+        <div class="container mx-auto px-4 py-3 flex flex-wrap items-center justify-between">
+            <!-- Logo区域 (法语品牌名+法国风格图标) -->
+            <a href="#" class="text-2xl font-bold text-france-blue flex items-center">
+                <i class="fas fa-briefcase mr-2"></i>
+                <span>JobTemp</span>
+            </a>
+
+            <!-- 导航菜单 - 中等屏幕以上显示 (法语菜单) -->
+            <nav class="hidden md:flex items-center space-x-8">
+                <a href="#" class="font-medium text-france-blue border-b-2 border-france-blue py-1">Accueil</a>
+                <a href="#" class="font-medium text-gray-600 hover:text-france-blue transition py-1">Catégories</a>
+                <a href="#" class="font-medium text-gray-600 hover:text-france-blue transition py-1">Entreprises</a>
+                <a href="#" class="font-medium text-gray-600 hover:text-france-blue transition py-1">Conseils d'emploi</a>
+                <a href="#" class="font-medium text-gray-600 hover:text-france-blue transition py-1">À propos</a>
+            </nav>
+
+            <!-- 功能按钮区 (法语按钮文本) -->
+            <div class="flex items-center space-x-4">
+                <a href="#" class="hidden sm:block text-gray-600 hover:text-france-blue transition">
+                    <i class="fas fa-user-circle mr-1"></i>Connexion
+                </a>
+                <a href="#" class="hidden sm:block bg-france-blue text-white px-4 py-2 rounded hover:bg-[#004488] transition btn-primary">
+                    Inscription
+                </a>
+                <!-- 企业入驻按钮 (法语) -->
+                <a href="#" class="hidden md:block bg-france-red text-white px-4 py-2 rounded hover:bg-[#DC3023] transition btn-primary">
+                    Entreprise s'inscrire
+                </a>
+                <!-- 移动端菜单按钮 -->
+                <button class="md:hidden text-gray-700 hover:text-france-blue transition" id="menuBtn">
+                    <i class="fas fa-bars text-xl"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- 移动端下拉菜单 (默认隐藏，法语) -->
+        <div class="md:hidden bg-white shadow-lg absolute w-full left-0 top-full transform -translate-y-full opacity-0 transition-all duration-300 pointer-events-none" id="mobileMenu">
+            <div class="container mx-auto px-4 py-3 flex flex-col space-y-3">
+                <a href="#" class="font-medium text-france-blue py-2 border-b border-gray-100">Accueil</a>
+                <a href="#" class="font-medium text-gray-600 hover:text-france-blue transition py-2 border-b border-gray-100">Catégories</a>
+                <a href="#" class="font-medium text-gray-600 hover:text-france-blue transition py-2 border-b border-gray-100">Entreprises</a>
+                <a href="#" class="font-medium text-gray-600 hover:text-france-blue transition py-2 border-b border-gray-100">Conseils d'emploi</a>
+                <a href="#" class="font-medium text-gray-600 hover:text-france-blue transition py-2 border-b border-gray-100">À propos</a>
+                <div class="flex space-x-3 pt-2">
+                    <a href="#" class="flex-1 text-center bg-gray-100 text-gray-700 px-4 py-2 rounded">Connexion</a>
+                    <a href="#" class="flex-1 text-center bg-france-blue text-white px-4 py-2 rounded">Inscription</a>
+                </div>
+                <a href="#" class="text-center bg-france-red text-white px-4 py-2 rounded">Entreprise s'inscrire</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- 搜索区域 (法国蓝主色调) -->
+    <section class="bg-france-blue py-8">
+        <div class="container mx-auto px-4">
+            <div class="max-w-4xl mx-auto text-center mb-6">
+                <h1 class="text-[clamp(1.8rem,4vw,2.5rem)] font-bold text-white mb-2">Trouvez un job temporaire, sur JobTemp</h1>
+                <p class="text-blue-100 text-lg">Des centaines de jobs temporaires fiables, gagnez de l'argent facilement</p>
+            </div>
+            <!-- 搜索框 (法语选项/占位符) -->
+            <div class="max-w-4xl mx-auto bg-white rounded-lg shadow-lg p-2 flex flex-wrap">
+                <div class="w-full md:w-1/4 px-2 mb-2 md:mb-0">
+                    <select class="w-full py-3 px-4 rounded border border-gray-200 focus:outline-none focus:ring-2 focus:ring-france-blue focus:border-transparent">
+                        <option>Toutes les catégories</option>
+                        <option>Job en ligne</option>
+                        <option>Job hors ligne</option>
+                        <option>Stage temporaire</option>
+                        <option>Job payé par jour</option>
+                    </select>
+                </div>
+                <div class="w-full md:w-2/4 px-2 mb-2 md:mb-0">
+                    <input type="text" placeholder="Entrez des mots-clés, ex: tuteur, service client, rédaction..." 
+                        class="w-full py-3 px-4 rounded border border-gray-200 focus:outline-none focus:ring-2 focus:ring-france-blue focus:border-transparent">
+                </div>
+                <div class="w-full md:w-1/4 px-2">
+                    <button class="w-full bg-france-blue text-white py-3 px-4 rounded hover:bg-[#004488] transition btn-primary">
+                        <i class="fas fa-search mr-2"></i>Chercher un job
+                    </button>
+                </div>
+            </div>
+            <!-- 热门搜索标签 (法语，法国常见兼职) -->
+            <div class="max-w-4xl mx-auto mt-4 flex flex-wrap justify-center gap-2">
+                <a href="#" class="text-blue-100 hover:text-white transition"># Tuteur</a>
+                <a href="#" class="text-blue-100 hover:text-white transition"># Serveur</a>
+                <a href="#" class="text-blue-100 hover:text-white transition"># Livreur</a>
+                <a href="#" class="text-blue-100 hover:text-white transition"># Promoteur</a>
+                <a href="#" class="text-blue-100 hover:text-white transition"># Rédacteur</a>
+                <a href="#" class="text-blue-100 hover:text-white transition"># Designer</a>
+                <a href="#" class="text-blue-100 hover:text-white transition"># Babysitter</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- 兼职分类 (法国常见兼职类型，法语) -->
+    <section class="container mx-auto px-4 py-8">
+        <h2 class="text-2xl font-bold mb-6 text-gray-800">Catégories de jobs temporaires</h2>
+        <div class="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-4">
+            <a href="#" class="flex flex-col items-center p-4 bg-white rounded-lg hover:shadow-md transition">
+                <i class="fas fa-chalkboard-teacher text-3xl text-france-blue mb-2"></i>
+                <span class="text-sm">Éducation</span>
+            </a>
+            <a href="#" class="flex flex-col items-center p-4 bg-white rounded-lg hover:shadow-md transition">
+                <i class="fas fa-utensils text-3xl text-france-red mb-2"></i>
+                <span class="text-sm">Restauration</span>
+            </a>
+            <a href="#" class="flex flex-col items-center p-4 bg-white rounded-lg hover:shadow-md transition">
+                <i class="fas fa-motorcycle text-3xl text-green-500 mb-2"></i>
+                <span class="text-sm">Livraison</span>
+            </a>
+            <a href="#" class="flex flex-col items-center p-4 bg-white rounded-lg hover:shadow-md transition">
+                <i class="fas fa-laptop text-3xl text-purple-500 mb-2"></i>
+                <span class="text-sm">Informatique</span>
+            </a>
+            <a href="#" class="flex flex-col items-center p-4 bg-white rounded-lg hover:shadow-md transition">
+                <i class="fas fa-baby text-3xl text-pink-500 mb-2"></i>
+                <span class="text-sm">Garde d'enfants</span>
+            </a>
+            <a href="#" class="flex flex-col items-center p-4 bg-white rounded-lg hover:shadow-md transition">
+                <i class="fas fa-pen-fancy text-3xl text-orange-500 mb-2"></i>
+                <span class="text-sm">Rédaction</span>
+            </a>
+            <a href="#" class="flex flex-col items-center p-4 bg-white rounded-lg hover:shadow-md transition">
+                <i class="fas fa-shopping-cart text-3xl text-yellow-500 mb-2"></i>
+                <span class="text-sm">Vente</span>
+            </a>
+            <a href="#" class="flex flex-col items-center p-4 bg-white rounded-lg hover:shadow-md transition">
+                <i class="fas fa-ellipsis-h text-3xl text-gray-500 mb-2"></i>
+                <span class="text-sm">Plus de catégories</span>
+            </a>
+        </div>
+    </section>
+
+    <!-- 热门兼职列表 (法语，法国本土场景) -->
+    <section class="container mx-auto px-4 py-8 bg-white rounded-xl shadow-sm mb-8">
+        <div class="flex justify-between items-center mb-6">
+            <h2 class="text-2xl font-bold text-gray-800">Jobs temporaires populaires</h2>
+            <a href="#" class="text-france-blue hover:underline">Voir tout <i class="fas fa-chevron-right text-xs"></i></a>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- 兼职卡片1 -->
+            <div class="job-card bg-white border border-gray-200 rounded-lg p-5">
+                <div class="flex justify-between items-start mb-3">
+                    <h3 class="text-lg font-semibold text-gray-800">Serveur / Serveuse - Paris 75001</h3>
+                    <span class="bg-green-100 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded">Disponible</span>
+                </div>
+                <div class="flex items-center text-gray-500 text-sm mb-3">
+                    <i class="fas fa-map-marker-alt mr-1"></i>
+                    <span>Paris, Île-de-France</span>
+                    <span class="mx-2">•</span>
+                    <i class="fas fa-clock mr-1"></i>
+                    <span>Temps partiel</span>
+                </div>
+                <div class="text-gray-600 text-sm mb-4">
+                    <p>Restaurant français cherche serveur/serveuse pour saison estivale. Expérience préférée, bon niveau d'anglais.</p>
+                </div>
+                <div class="flex justify-between items-center">
+                    <span class="font-bold text-france-red">12 € / heure</span>
+                    <a href="#" class="bg-france-blue text-white px-4 py-2 rounded text-sm hover:bg-[#004488] transition btn-primary">Postuler</a>
+                </div>
+            </div>
+            <!-- 兼职卡片2 -->
+            <div class="job-card bg-white border border-gray-200 rounded-lg p-5">
+                <div class="flex justify-between items-start mb-3">
+                    <h3 class="text-lg font-semibold text-gray-800">Livreur - Lyon 69002</h3>
+                    <span class="bg-green-100 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded">Disponible</span>
+                </div>
+                <div class="flex items-center text-gray-500 text-sm mb-3">
+                    <i class="fas fa-map-marker-alt mr-1"></i>
+                    <span>Lyon, Auvergne-Rhône-Alpes</span>
+                    <span class="mx-2">•</span>
+                    <i class="fas fa-clock mr-1"></i>
+                    <span>Intérim</span>
+                </div>
+                <div class="text-gray-600 text-sm mb-4">
+                    <p>Livreur à vélo pour application de livraison. Disponibilité 7j/7, bon connaissance de Lyon.</p>
+                </div>
+                <div class="flex justify-between items-center">
+                    <span class="font-bold text-france-red">11 € / heure + primes</span>
+                    <a href="#" class="bg-france-blue text-white px-4 py-2 rounded text-sm hover:bg-[#004488] transition btn-primary">Postuler</a>
+                </div>
+            </div>
+            <!-- 兼职卡片3 -->
+            <div class="job-card bg-white border border-gray-200 rounded-lg p-5">
+                <div class="flex justify-between items-start mb-3">
+                    <h3 class="text-lg font-semibold text-gray-800">Tuteur de maths - Marseille</h3>
+                    <span class="bg-green-100 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded">Disponible</span>
+                </div>
+                <div class="flex items-center text-gray-500 text-sm mb-3">
+                    <i class="fas fa-map-marker-alt mr-1"></i>
+                    <span>Marseille, Provence-Alpes-Côte d'Azur</span>
+                    <span class="mx-2">•</span>
+                    <i class="fas fa-clock mr-1"></i>
+                    <span>Job en ligne</span>
+                </div>
+                <div class="text-gray-600 text-sm mb-4">
+                    <p>Tuteur de maths pour lycéens. Niveau bac+2 minimum, pédagogue et patient.</p>
+                </div>
+                <div class="flex justify-between items-center">
+                    <span class="font-bold text-france-red">15 € / heure</span>
+                    <a href="#" class="bg-france-blue text-white px-4 py-2 rounded text-sm hover:bg-[#004488] transition btn-primary">Postuler</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 推荐企业 (法国知名企业风格，法语) -->
+    <section class="container mx-auto px-4 py-8 mb-8">
+        <h2 class="text-2xl font-bold mb-6 text-gray-800">Entreprises partenaires</h2>
+        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-6">
+            <div class="bg-white rounded-lg p-4 flex items-center justify-center hover:shadow-md transition">
+                <span class="text-lg font-bold text-france-blue">Carrefour</span>
+            </div>
+            <div class="bg-white rounded-lg p-4 flex items-center justify-center hover:shadow-md transition">
+                <span class="text-lg font-bold text-red-600">McDonald's</span>
+            </div>
+            <div class="bg-white rounded-lg p-4 flex items-center justify-center hover:shadow-md transition">
+                <span class="text-lg font-bold text-yellow-500">Lidl</span>
+            </div>
+            <div class="bg-white rounded-lg p-4 flex items-center justify-center hover:shadow-md transition">
+                <span class="text-lg font-bold text-blue-800">Leclerc</span>
+            </div>
+            <div class="bg-white rounded-lg p-4 flex items-center justify-center hover:shadow-md transition">
+                <span class="text-lg font-bold text-green-600">Intermarché</span>
+            </div>
+            <div class="bg-white rounded-lg p-4 flex items-center justify-center hover:shadow-md transition">
+                <span class="text-lg font-bold text-purple-600">Fnac</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- 页脚 (法语，法国联系方式格式) -->
+    <footer class="bg-gray-800 text-white py-10">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <!-- 关于我们 -->
+                <div>
+                    <h3 class="text-lg font-bold mb-4 border-b border-gray-700 pb-2">À propos de nous</h3>
+                    <p class="text-gray-400 text-sm mb-4">JobTemp est la plateforme leader de job temporaire en France, connectant les chercheurs d'emploi et les entreprises depuis 2010.</p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-400 hover:text-white transition"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-white transition"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-white transition"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+                <!-- 快速链接 -->
+                <div>
+                    <h3 class="text-lg font-bold mb-4 border-b border-gray-700 pb-2">Liens rapides</h3>
+                    <ul class="space-y-2 text-sm text-gray-400">
+                        <li><a href="#" class="hover:text-white transition">Accueil</a></li>
+                        <li><a href="#" class="hover:text-white transition">Rechercher des jobs</a></li>
+                        <li><a href="#" class="hover:text-white transition">Déposer une annonce</a></li>
+                        <li><a href="#" class="hover:text-white transition">Conseils d'emploi</a></li>
+                        <li><a href="#" class="hover:text-white transition">FAQ</a></li>
+                    </ul>
+                </div>
+                <!-- 联系我们 (法国格式) -->
+                <div>
+                    <h3 class="text-lg font-bold mb-4 border-b border-gray-700 pb-2">Nous contacter</h3>
+                    <ul class="space-y-2 text-sm text-gray-400">
+                        <li class="flex items-center"><i class="fas fa-map-marker-alt mr-2"></i> 12 Rue de Rivoli, 75001 Paris</li>
+                        <li class="flex items-center"><i class="fas fa-phone mr-2"></i> +33 1 23 45 67 89</li>
+                        <li class="flex items-center"><i class="fas fa-envelope mr-2"></i> contact@jobtemp.fr</li>
+                        <li class="flex items-center"><i class="fas fa-clock mr-2"></i> Lundi-Vendredi: 9h-18h</li>
+                    </ul>
+                </div>
+                <!-- 订阅通讯 -->
+                <div>
+                    <h3 class="text-lg font-bold mb-4 border-b border-gray-700 pb-2">Abonnez-vous</h3>
+                    <p class="text-gray-400 text-sm mb-4">Recevez les dernières offres de job temporaire directement dans votre boîte mail.</p>
+                    <div class="flex">
+                        <input type="email" placeholder="Votre adresse email" class="flex-1 py-2 px-3 rounded-l text-gray-800 focus:outline-none">
+                        <button class="bg-france-blue hover:bg-[#004488] transition py-2 px-4 rounded-r">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="border-t border-gray-700 mt-8 pt-8 text-center text-gray-500 text-sm">
+                <p>© 2025 JobTemp. Tous droits réservés. | <a href="#" class="hover:text-white transition">Conditions d'utilisation</a> | <a href="#" class="hover:text-white transition">Politique de confidentialité</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript 交互 (移动端菜单、基础交互) -->
+    <script>
+        // 移动端菜单切换
+        const menuBtn = document.getElementById('menuBtn');
+        const mobileMenu = document.getElementById('mobileMenu');
+        
+        menuBtn.addEventListener('click', () => {
+            if (mobileMenu.classList.contains('opacity-0')) {
+                mobileMenu.classList.remove('opacity-0', '-translate-y-full', 'pointer-events-none');
+                mobileMenu.classList.add('opacity-100', 'translate-y-0', 'pointer-events-auto');
+            } else {
+                mobileMenu.classList.add('opacity-0', '-translate-y-full', 'pointer-events-none');
+                mobileMenu.classList.remove('opacity-100', 'translate-y-0', 'pointer-events-auto');
+            }
+        });
+
+        // 点击页面其他区域关闭移动端菜单
+        document.addEventListener('click', (e) => {
+            if (!menuBtn.contains(e.target) && !mobileMenu.contains(e.target)) {
+                mobileMenu.classList.add('opacity-0', '-translate-y-full', 'pointer-events-none');
+                mobileMenu.classList.remove('opacity-100', 'translate-y-0', 'pointer-events-auto');
+            }
+        });
+    </script>
+</body>
+</html>
