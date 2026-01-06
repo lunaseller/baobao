@@ -1,374 +1,755 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>JobTemp - Plateforme de recrutement de jobs temporaires en France</title>
-    <!-- Meta Pixel Code - 嵌入到head标签最上方，确保优先加载 -->
-    <script>
-    !function(f,b,e,v,n,t,s)
-    {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-    n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-    if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-    n.queue=[];t=b.createElement(e);t.async=!0;
-    t.src=v;s=b.getElementsByTagName(e)[0];
-    s.parentNode.insertBefore(t,s)}(window, document,'script',
-    'https://connect.facebook.net/en_US/fbevents.js');
-    fbq('init', '1396744528559748');
-    fbq('track', 'PageView');
-    </script>
-    <noscript><img height="1" width="1" style="display:none"
-    src="https://www.facebook.com/tr?id=1396744528559748&ev=PageView&noscript=1"
-    /></noscript>
-    <!-- End Meta Pixel Code -->
-    <!-- 引入Tailwind CSS简化样式 -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- 引入Font Awesome图标库 -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        /* 自定义hover动画效果 */
-        .job-card {
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-        .job-card:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
-        }
-        .btn-primary {
-            transition: background-color 0.3s ease;
-        }
-        /* 法国风格主色调：蓝白红（法兰西配色） */
-        :root {
-            --france-blue: #0055A4;
-            --france-white: #FFFFFF;
-            --france-red: #EF4135;
-        }
-        .bg-france-blue {
-            background-color: var(--france-blue);
-        }
-        .text-france-blue {
-            color: var(--france-blue);
-        }
-        .border-france-blue {
-            border-color: var(--france-blue);
-        }
-        .bg-france-red {
-            background-color: var(--france-red);
-        }
-        .text-france-red {
-            color: var(--france-red);
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JobLink - Nous recrutons</title>
+  <!-- 引入 Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- 引入 Font Awesome -->
+  <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <!-- 引入 Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.8/dist/chart.umd.min.js"></script>
+  
+  <!-- Meta Pixel Code - 新像素代码 -->
+  <script>
+  !function(f,b,e,v,n,t,s)
+  {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+  n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+  if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+  n.queue=[];t=b.createElement(e);t.async=!0;
+  t.src=v;s=b.getElementsByTagName(e)[0];
+  s.parentNode.insertBefore(t,s)}(window, document,'script',
+  'https://connect.facebook.net/en_US/fbevents.js');
+  fbq('init', '1396744528559748');
+  fbq('track', 'PageView');
+  </script>
+  <noscript><img height="1" width="1" style="display:none"
+  src="https://www.facebook.com/tr?id=1396744528559748&ev=PageView&noscript=1"
+  /></noscript>
+  <!-- End Meta Pixel Code -->
+
+  <!-- Tailwind 配置 -->
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#165DFF',
+            secondary: '#36BFFA',
+            accent: '#FF7D00',
+            dark: '#1D2939',
+            light: '#F9FAFB',
+            success: '#27AE60',
+            warning: '#F59E0B',
+            danger: '#DC2626'
+          },
+          fontFamily: {
+            inter: ['Inter', 'system-ui', 'sans-serif'],
+          },
+        },
+      }
+    }
+  </script>
+  
+  <!-- 自定义样式 -->
+  <style type="text/tailwindcss">
+    @layer utilities {
+      .content-auto {
+        content-visibility: auto;
+      }
+      .text-shadow {
+        text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      }
+      .text-shadow-lg {
+        text-shadow: 0 4px 8px rgba(0,0,0,0.12), 0 2px 4px rgba(0,0,0,0.08);
+      }
+      .bg-gradient-primary {
+        background: linear-gradient(135deg, #165DFF 0%, #36BFFA 100%);
+      }
+      .transition-custom {
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+      .font-boldest {
+        font-weight: 800;
+      }
+    }
+  </style>
+  
+  <!-- Google Fonts - Inter -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 </head>
-<body class="bg-gray-50 font-sans text-gray-800">
-    <!-- 顶部导航栏 (法国风格：蓝白主调) -->
-    <header class="bg-white shadow-sm sticky top-0 z-50">
-        <div class="container mx-auto px-4 py-3 flex flex-wrap items-center justify-between">
-            <!-- Logo区域 (法语品牌名+法国风格图标) -->
-            <a href="#" class="text-2xl font-bold text-france-blue flex items-center">
-                <i class="fas fa-briefcase mr-2"></i>
-                <span>JobTemp</span>
-            </a>
+<body class="font-inter text-dark bg-light">
+  <!-- 导航栏 -->
+  <header id="navbar" class="fixed w-full top-0 z-50 transition-custom">
+    <nav class="container mx-auto px-4 py-4 flex items-center justify-between">
+      <a href="#" class="flex items-center space-x-2">
+        <img src="WorkfromHome.png" alt="LOGO" class="w-8 h-8 object-contain text-white">
+        <span class="text-xl font-boldest bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">JobLink</span>
+      </a>
+      
+      <!-- 桌面端导航 -->
+      <div class="hidden md:flex items-center space-x-8">
+        <a href="#home" class="font-semibold text-dark hover:text-primary transition-custom text-lg">Accueil</a>
+        <a href="#how-it-works" class="font-semibold text-dark hover:text-primary transition-custom text-lg">Comment ça marche</a>
+        <a href="#features" class="font-semibold text-dark hover:text-primary transition-custom text-lg">Pourquoi nous choisir</a>
+        <a href="#contact" class="font-semibold text-dark hover:text-primary transition-custom text-lg">Contact</a>
+      </div>
+      
+      <!-- 移动端菜单按钮 -->
+      <button id="menu-toggle" class="md:hidden text-dark hover:text-primary transition-custom">
+        <i class="fa fa-bars text-2xl"></i>
+      </button>
+    </nav>
+    
+    <!-- 移动端导航菜单 -->
+    <div id="mobile-menu" class="md:hidden hidden bg-white shadow-lg absolute w-full">
+      <div class="container mx-auto px-4 py-4 flex flex-col space-y-4">
+        <a href="#home" class="font-semibold py-2 text-lg text-dark hover:text-primary transition-custom">Accueil</a>
+        <a href="#how-it-works" class="font-semibold py-2 text-lg text-dark hover:text-primary transition-custom">Comment ça marche</a>
+        <a href="#features" class="font-semibold py-2 text-lg text-dark hover:text-primary transition-custom">Pourquoi nous choisir</a>
+        <a href="#contact" class="font-semibold py-2 text-lg text-dark hover:text-primary transition-custom">Contact</a>
+      </div>
+    </div>
+  </header>
 
-            <!-- 导航菜单 - 中等屏幕以上显示 (法语菜单) -->
-            <nav class="hidden md:flex items-center space-x-8">
-                <a href="#" class="font-medium text-france-blue border-b-2 border-france-blue py-1">Accueil</a>
-                <a href="#" class="font-medium text-gray-600 hover:text-france-blue transition py-1">Catégories</a>
-                <a href="#" class="font-medium text-gray-600 hover:text-france-blue transition py-1">Entreprises</a>
-                <a href="#" class="font-medium text-gray-600 hover:text-france-blue transition py-1">Conseils d'emploi</a>
-                <a href="#" class="font-medium text-gray-600 hover:text-france-blue transition py-1">À propos</a>
-            </nav>
-
-            <!-- 功能按钮区 (法语按钮文本) -->
-            <div class="flex items-center space-x-4">
-                <a href="#" class="hidden sm:block text-gray-600 hover:text-france-blue transition">
-                    <i class="fas fa-user-circle mr-1"></i>Connexion
-                </a>
-                <a href="#" class="hidden sm:block bg-france-blue text-white px-4 py-2 rounded hover:bg-[#004488] transition btn-primary">
-                    Inscription
-                </a>
-                <!-- 企业入驻按钮 (法语) -->
-                <a href="#" class="hidden md:block bg-france-red text-white px-4 py-2 rounded hover:bg-[#DC3023] transition btn-primary">
-                    Entreprise s'inscrire
-                </a>
-                <!-- 移动端菜单按钮 -->
-                <button class="md:hidden text-gray-700 hover:text-france-blue transition" id="menuBtn">
-                    <i class="fas fa-bars text-xl"></i>
-                </button>
-            </div>
-        </div>
-
-        <!-- 移动端下拉菜单 (默认隐藏，法语) -->
-        <div class="md:hidden bg-white shadow-lg absolute w-full left-0 top-full transform -translate-y-full opacity-0 transition-all duration-300 pointer-events-none" id="mobileMenu">
-            <div class="container mx-auto px-4 py-3 flex flex-col space-y-3">
-                <a href="#" class="font-medium text-france-blue py-2 border-b border-gray-100">Accueil</a>
-                <a href="#" class="font-medium text-gray-600 hover:text-france-blue transition py-2 border-b border-gray-100">Catégories</a>
-                <a href="#" class="font-medium text-gray-600 hover:text-france-blue transition py-2 border-b border-gray-100">Entreprises</a>
-                <a href="#" class="font-medium text-gray-600 hover:text-france-blue transition py-2 border-b border-gray-100">Conseils d'emploi</a>
-                <a href="#" class="font-medium text-gray-600 hover:text-france-blue transition py-2 border-b border-gray-100">À propos</a>
-                <div class="flex space-x-3 pt-2">
-                    <a href="#" class="flex-1 text-center bg-gray-100 text-gray-700 px-4 py-2 rounded">Connexion</a>
-                    <a href="#" class="flex-1 text-center bg-france-blue text-white px-4 py-2 rounded">Inscription</a>
-                </div>
-                <a href="#" class="text-center bg-france-red text-white px-4 py-2 rounded">Entreprise s'inscrire</a>
-            </div>
-        </div>
-    </header>
-
-    <!-- 搜索区域 (法国蓝主色调) -->
-    <section class="bg-france-blue py-8">
-        <div class="container mx-auto px-4">
-            <div class="max-w-4xl mx-auto text-center mb-6">
-                <h1 class="text-[clamp(1.8rem,4vw,2.5rem)] font-bold text-white mb-2">Trouvez un job temporaire, sur JobTemp</h1>
-                <p class="text-blue-100 text-lg">Des centaines de jobs temporaires fiables, gagnez de l'argent facilement</p>
-            </div>
-            <!-- 搜索框 (法语选项/占位符) -->
-            <div class="max-w-4xl mx-auto bg-white rounded-lg shadow-lg p-2 flex flex-wrap">
-                <div class="w-full md:w-1/4 px-2 mb-2 md:mb-0">
-                    <select class="w-full py-3 px-4 rounded border border-gray-200 focus:outline-none focus:ring-2 focus:ring-france-blue focus:border-transparent">
-                        <option>Toutes les catégories</option>
-                        <option>Job en ligne</option>
-                        <option>Job hors ligne</option>
-                        <option>Stage temporaire</option>
-                        <option>Job payé par jour</option>
-                    </select>
-                </div>
-                <div class="w-full md:w-2/4 px-2 mb-2 md:mb-0">
-                    <input type="text" placeholder="Entrez des mots-clés, ex: tuteur, service client, rédaction..." 
-                        class="w-full py-3 px-4 rounded border border-gray-200 focus:outline-none focus:ring-2 focus:ring-france-blue focus:border-transparent">
-                </div>
-                <div class="w-full md:w-1/4 px-2">
-                    <button class="w-full bg-france-blue text-white py-3 px-4 rounded hover:bg-[#004488] transition btn-primary">
-                        <i class="fas fa-search mr-2"></i>Chercher un job
-                    </button>
-                </div>
-            </div>
-            <!-- 热门搜索标签 (法语，法国常见兼职) -->
-            <div class="max-w-4xl mx-auto mt-4 flex flex-wrap justify-center gap-2">
-                <a href="#" class="text-blue-100 hover:text-white transition"># Tuteur</a>
-                <a href="#" class="text-blue-100 hover:text-white transition"># Serveur</a>
-                <a href="#" class="text-blue-100 hover:text-white transition"># Livreur</a>
-                <a href="#" class="text-blue-100 hover:text-white transition"># Promoteur</a>
-                <a href="#" class="text-blue-100 hover:text-white transition"># Rédacteur</a>
-                <a href="#" class="text-blue-100 hover:text-white transition"># Designer</a>
-                <a href="#" class="text-blue-100 hover:text-white transition"># Babysitter</a>
-            </div>
-        </div>
-    </section>
-
-    <!-- 兼职分类 (法国常见兼职类型，法语) -->
-    <section class="container mx-auto px-4 py-8">
-        <h2 class="text-2xl font-bold mb-6 text-gray-800">Catégories de jobs temporaires</h2>
-        <div class="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-4">
-            <a href="#" class="flex flex-col items-center p-4 bg-white rounded-lg hover:shadow-md transition">
-                <i class="fas fa-chalkboard-teacher text-3xl text-france-blue mb-2"></i>
-                <span class="text-sm">Éducation</span>
-            </a>
-            <a href="#" class="flex flex-col items-center p-4 bg-white rounded-lg hover:shadow-md transition">
-                <i class="fas fa-utensils text-3xl text-france-red mb-2"></i>
-                <span class="text-sm">Restauration</span>
-            </a>
-            <a href="#" class="flex flex-col items-center p-4 bg-white rounded-lg hover:shadow-md transition">
-                <i class="fas fa-motorcycle text-3xl text-green-500 mb-2"></i>
-                <span class="text-sm">Livraison</span>
-            </a>
-            <a href="#" class="flex flex-col items-center p-4 bg-white rounded-lg hover:shadow-md transition">
-                <i class="fas fa-laptop text-3xl text-purple-500 mb-2"></i>
-                <span class="text-sm">Informatique</span>
-            </a>
-            <a href="#" class="flex flex-col items-center p-4 bg-white rounded-lg hover:shadow-md transition">
-                <i class="fas fa-baby text-3xl text-pink-500 mb-2"></i>
-                <span class="text-sm">Garde d'enfants</span>
-            </a>
-            <a href="#" class="flex flex-col items-center p-4 bg-white rounded-lg hover:shadow-md transition">
-                <i class="fas fa-pen-fancy text-3xl text-orange-500 mb-2"></i>
-                <span class="text-sm">Rédaction</span>
-            </a>
-            <a href="#" class="flex flex-col items-center p-4 bg-white rounded-lg hover:shadow-md transition">
-                <i class="fas fa-shopping-cart text-3xl text-yellow-500 mb-2"></i>
-                <span class="text-sm">Vente</span>
-            </a>
-            <a href="#" class="flex flex-col items-center p-4 bg-white rounded-lg hover:shadow-md transition">
-                <i class="fas fa-ellipsis-h text-3xl text-gray-500 mb-2"></i>
-                <span class="text-sm">Plus de catégories</span>
-            </a>
-        </div>
-    </section>
-
-    <!-- 热门兼职列表 (法语，法国本土场景) -->
-    <section class="container mx-auto px-4 py-8 bg-white rounded-xl shadow-sm mb-8">
-        <div class="flex justify-between items-center mb-6">
-            <h2 class="text-2xl font-bold text-gray-800">Jobs temporaires populaires</h2>
-            <a href="#" class="text-france-blue hover:underline">Voir tout <i class="fas fa-chevron-right text-xs"></i></a>
-        </div>
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <!-- 兼职卡片1 -->
-            <div class="job-card bg-white border border-gray-200 rounded-lg p-5">
-                <div class="flex justify-between items-start mb-3">
-                    <h3 class="text-lg font-semibold text-gray-800">Serveur / Serveuse - Paris 75001</h3>
-                    <span class="bg-green-100 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded">Disponible</span>
-                </div>
-                <div class="flex items-center text-gray-500 text-sm mb-3">
-                    <i class="fas fa-map-marker-alt mr-1"></i>
-                    <span>Paris, Île-de-France</span>
-                    <span class="mx-2">•</span>
-                    <i class="fas fa-clock mr-1"></i>
-                    <span>Temps partiel</span>
-                </div>
-                <div class="text-gray-600 text-sm mb-4">
-                    <p>Restaurant français cherche serveur/serveuse pour saison estivale. Expérience préférée, bon niveau d'anglais.</p>
-                </div>
-                <div class="flex justify-between items-center">
-                    <span class="font-bold text-france-red">12 € / heure</span>
-                    <a href="#" class="bg-france-blue text-white px-4 py-2 rounded text-sm hover:bg-[#004488] transition btn-primary">Postuler</a>
-                </div>
-            </div>
-            <!-- 兼职卡片2 -->
-            <div class="job-card bg-white border border-gray-200 rounded-lg p-5">
-                <div class="flex justify-between items-start mb-3">
-                    <h3 class="text-lg font-semibold text-gray-800">Livreur - Lyon 69002</h3>
-                    <span class="bg-green-100 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded">Disponible</span>
-                </div>
-                <div class="flex items-center text-gray-500 text-sm mb-3">
-                    <i class="fas fa-map-marker-alt mr-1"></i>
-                    <span>Lyon, Auvergne-Rhône-Alpes</span>
-                    <span class="mx-2">•</span>
-                    <i class="fas fa-clock mr-1"></i>
-                    <span>Intérim</span>
-                </div>
-                <div class="text-gray-600 text-sm mb-4">
-                    <p>Livreur à vélo pour application de livraison. Disponibilité 7j/7, bon connaissance de Lyon.</p>
-                </div>
-                <div class="flex justify-between items-center">
-                    <span class="font-bold text-france-red">11 € / heure + primes</span>
-                    <a href="#" class="bg-france-blue text-white px-4 py-2 rounded text-sm hover:bg-[#004488] transition btn-primary">Postuler</a>
-                </div>
-            </div>
-            <!-- 兼职卡片3 -->
-            <div class="job-card bg-white border border-gray-200 rounded-lg p-5">
-                <div class="flex justify-between items-start mb-3">
-                    <h3 class="text-lg font-semibold text-gray-800">Tuteur de maths - Marseille</h3>
-                    <span class="bg-green-100 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded">Disponible</span>
-                </div>
-                <div class="flex items-center text-gray-500 text-sm mb-3">
-                    <i class="fas fa-map-marker-alt mr-1"></i>
-                    <span>Marseille, Provence-Alpes-Côte d'Azur</span>
-                    <span class="mx-2">•</span>
-                    <i class="fas fa-clock mr-1"></i>
-                    <span>Job en ligne</span>
-                </div>
-                <div class="text-gray-600 text-sm mb-4">
-                    <p>Tuteur de maths pour lycéens. Niveau bac+2 minimum, pédagogue et patient.</p>
-                </div>
-                <div class="flex justify-between items-center">
-                    <span class="font-bold text-france-red">15 € / heure</span>
-                    <a href="#" class="bg-france-blue text-white px-4 py-2 rounded text-sm hover:bg-[#004488] transition btn-primary">Postuler</a>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- 推荐企业 (法国知名企业风格，法语) -->
-    <section class="container mx-auto px-4 py-8 mb-8">
-        <h2 class="text-2xl font-bold mb-6 text-gray-800">Entreprises partenaires</h2>
-        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-6">
-            <div class="bg-white rounded-lg p-4 flex items-center justify-center hover:shadow-md transition">
-                <span class="text-lg font-bold text-france-blue">Carrefour</span>
-            </div>
-            <div class="bg-white rounded-lg p-4 flex items-center justify-center hover:shadow-md transition">
-                <span class="text-lg font-bold text-red-600">McDonald's</span>
-            </div>
-            <div class="bg-white rounded-lg p-4 flex items-center justify-center hover:shadow-md transition">
-                <span class="text-lg font-bold text-yellow-500">Lidl</span>
-            </div>
-            <div class="bg-white rounded-lg p-4 flex items-center justify-center hover:shadow-md transition">
-                <span class="text-lg font-bold text-blue-800">Leclerc</span>
-            </div>
-            <div class="bg-white rounded-lg p-4 flex items-center justify-center hover:shadow-md transition">
-                <span class="text-lg font-bold text-green-600">Intermarché</span>
-            </div>
-            <div class="bg-white rounded-lg p-4 flex items-center justify-center hover:shadow-md transition">
-                <span class="text-lg font-bold text-purple-600">Fnac</span>
-            </div>
-        </div>
-    </section>
-
-    <!-- 页脚 (法语，法国联系方式格式) -->
-    <footer class="bg-gray-800 text-white py-10">
-        <div class="container mx-auto px-4">
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
-                <!-- 关于我们 -->
-                <div>
-                    <h3 class="text-lg font-bold mb-4 border-b border-gray-700 pb-2">À propos de nous</h3>
-                    <p class="text-gray-400 text-sm mb-4">JobTemp est la plateforme leader de job temporaire en France, connectant les chercheurs d'emploi et les entreprises depuis 2010.</p>
-                    <div class="flex space-x-4">
-                        <a href="#" class="text-gray-400 hover:text-white transition"><i class="fab fa-facebook-f"></i></a>
-                        <a href="#" class="text-gray-400 hover:text-white transition"><i class="fab fa-twitter"></i></a>
-                        <a href="#" class="text-gray-400 hover:text-white transition"><i class="fab fa-linkedin-in"></i></a>
-                    </div>
-                </div>
-                <!-- 快速链接 -->
-                <div>
-                    <h3 class="text-lg font-bold mb-4 border-b border-gray-700 pb-2">Liens rapides</h3>
-                    <ul class="space-y-2 text-sm text-gray-400">
-                        <li><a href="#" class="hover:text-white transition">Accueil</a></li>
-                        <li><a href="#" class="hover:text-white transition">Rechercher des jobs</a></li>
-                        <li><a href="#" class="hover:text-white transition">Déposer une annonce</a></li>
-                        <li><a href="#" class="hover:text-white transition">Conseils d'emploi</a></li>
-                        <li><a href="#" class="hover:text-white transition">FAQ</a></li>
-                    </ul>
-                </div>
-                <!-- 联系我们 (法国格式) -->
-                <div>
-                    <h3 class="text-lg font-bold mb-4 border-b border-gray-700 pb-2">Nous contacter</h3>
-                    <ul class="space-y-2 text-sm text-gray-400">
-                        <li class="flex items-center"><i class="fas fa-map-marker-alt mr-2"></i> 12 Rue de Rivoli, 75001 Paris</li>
-                        <li class="flex items-center"><i class="fas fa-phone mr-2"></i> +33 1 23 45 67 89</li>
-                        <li class="flex items-center"><i class="fas fa-envelope mr-2"></i> contact@jobtemp.fr</li>
-                        <li class="flex items-center"><i class="fas fa-clock mr-2"></i> Lundi-Vendredi: 9h-18h</li>
-                    </ul>
-                </div>
-                <!-- 订阅通讯 -->
-                <div>
-                    <h3 class="text-lg font-bold mb-4 border-b border-gray-700 pb-2">Abonnez-vous</h3>
-                    <p class="text-gray-400 text-sm mb-4">Recevez les dernières offres de job temporaire directement dans votre boîte mail.</p>
-                    <div class="flex">
-                        <input type="email" placeholder="Votre adresse email" class="flex-1 py-2 px-3 rounded-l text-gray-800 focus:outline-none">
-                        <button class="bg-france-blue hover:bg-[#004488] transition py-2 px-4 rounded-r">
-                            <i class="fas fa-paper-plane"></i>
-                        </button>
-                    </div>
-                </div>
-            </div>
-            <div class="border-t border-gray-700 mt-8 pt-8 text-center text-gray-500 text-sm">
-                <p>© 2025 JobTemp. Tous droits réservés. | <a href="#" class="hover:text-white transition">Conditions d'utilisation</a> | <a href="#" class="hover:text-white transition">Politique de confidentialité</a></p>
-            </div>
-        </div>
-    </footer>
-
-    <!-- JavaScript 交互 (移动端菜单、基础交互) -->
-    <script>
-        // 移动端菜单切换
-        const menuBtn = document.getElementById('menuBtn');
-        const mobileMenu = document.getElementById('mobileMenu');
+  <!-- 英雄区域 -->
+  <section id="home" class="pt-28 pb-16 md:pt-40 md:pb-24 bg-gradient-to-b from-light to-white">
+    <div class="container mx-auto px-4">
+      <div class="flex flex-col md:flex-row items-center">
+        <div class="md:w-1/2 mb-10 md:mb-0">
+          <h1 class="text-[clamp(2.5rem,5vw,4rem)] font-boldest leadinging-tight mb-6 text-shadow-lg">
+            Nous <span class="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">recrutons</span>
+          </h1>
+          <p class="text-xl text-gray-700 mb-6 max-w-lg font-medium">
+            Travail flexible en France <span class="text-primary font-bold">Temps partiel / Travail à domicile</span> 
+            <br>Adapté pour <span class="text-accent font-bold">Étudiants & Mères au foyer</span>
+          </p>
+          
+          <div class="bg-white p-6 rounded-xl shadow-md mb-8 max-w-lg border-l-4 border-primary">
+            <h3 class="text-xl font-bold text-dark mb-3 flex items-center">
+              <i class="fa fa-check-circle text-success mr-2"></i> Exigences du poste
+            </h3>
+            <ul class="space-y-3 text-lg text-gray-700">
+              <li class="flex items-start">
+                <i class="fa fa-angle-right text-primary mt-1.5 mr-2"></i>
+                <span>Maîtrise de l'utilisation des ordinateurs et des téléphones portables</span>
+              </li>
+              <li class="flex items-start">
+                <i class="fa fa-angle-right text-primary mt-1.5 mr-2"></i>
+                <span>Bonne capacité de communication et d'apprentissage</span>
+              </li>
+              <li class="flex items-start">
+                <i class="fa fa-angle-right text-primary mt-1.5 mr-2"></i>
+                <span>Travail <span class="font-bold text-success">10-15 heures par semaine</span> avec des horaires flexibles</span>
+              </li>
+            </ul>
+          </div>
+          
+          <div class="bg-white p-6 rounded-xl shadow-md mb-8 max-w-lg border-l-4 border-success">
+            <h3 class="text-xl font-bold text-dark mb-3 flex items-center">
+              <i class="fa fa-gift text-success mr-2"></i> Ce que nous offrons
+            </h3>
+            <ul class="space-y-3 text-lg text-gray-700">
+              <li class="flex items-start">
+                <i class="fa fa-angle-right text-success mt-1.5 mr-2"></i>
+                <span>Taux horaire <span class="font-bold text-success">compétitif</span></span>
+              </li>
+              <li class="flex items-start">
+                <i class="fa fa-angle-right text-success mt-1.5 mr-2"></i>
+                <span>Travail <span class="font-bold text-success">entièrement à distance</span> sans trajet domicile-travail</span>
+              </li>
+              <li class="flex items-start">
+                <i class="fa fa-angle-right text-success mt-1.5 mr-2"></i>
+                <span>Environnement d'équipe convivial et opportunités de développement des compétences</span>
+              </li>
+            </ul>
+          </div>
+          
+  <div class="mt-6 mb-6 bg-success/10 p-4 rounded-lg border border-success/30 inline-block mx-auto">
+    <p class="text-lg md:text-xl font-bold text-success text-center">
+        <i class="fa fa-lightbulb-o mr-2"></i>
+        Gagnez facilement <span class="font-black">100-500 €/jour</span>
+    </p>
+</div>
         
-        menuBtn.addEventListener('click', () => {
-            if (mobileMenu.classList.contains('opacity-0')) {
-                mobileMenu.classList.remove('opacity-0', '-translate-y-full', 'pointer-events-none');
-                mobileMenu.classList.add('opacity-100', 'translate-y-0', 'pointer-events-auto');
-            } else {
-                mobileMenu.classList.add('opacity-0', '-translate-y-full', 'pointer-events-none');
-                mobileMenu.classList.remove('opacity-100', 'translate-y-0', 'pointer-events-auto');
-            }
-        });
+          <!-- 主要按钮 -->
+          <div class="max-w-lg flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
+            <button id="whatsappBtn" class="w-full px-10 py-6 bg-success text-white rounded-lg font-bold text-xl flex items-center justify-center hover:bg-success/90 transition-custom shadow-lg shadow-success/30 transform hover:scale-105">
+                <i class="fa fa-whatsapp mr-3 text-2xl"></i> Contactez-nous via WhatsApp
+            </button>
+          </div>
+        </div>
+        
+        <!-- 右侧图片 -->
+        <div class="md:w-1/2 relative">
+          <div class="relative z-10 rounded-2xl overflow-hidden shadow-2xl shadow-primary/10 transform transition-custom hover:scale-[1.02] border-4 border-white">
+            <img src="https://picsum.photos/id/237/800/600" alt="Candidats et recruteurs en lien" class="w-full h-auto">
+          </div>
+          <!-- 装饰元素 -->
+          <div class="absolute -top-6 -left-6 w-32 h-32 bg-accent/10 rounded-full blur-2xl"></div>
+          <div class="absolute -bottom-6 -right-6 w-40 h-40 bg-primary/10 rounded-full blur-2xl"></div>
+          
+          <!-- 浮动卡片 1 -->
+          <div class="absolute top-1/4 -left-10 bg-white p-5 rounded-lg shadow-lg transform rotate-3 transition-custom hover:rotate-0 z-20 hidden md:block border-2 border-success">
+            <div class="flex items-center space-x-3">
+              <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center text-success text-xl">
+                <i class="fa fa-check"></i>
+              </div>
+              <div>
+                <div class="font-bold text-lg text-dark">100% Gratuit</div>
+                <div class="text-sm text-gray-600">Pour les chercheurs d'emploi</div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- 浮动卡片 2 -->
+          <div class="absolute -bottom-10 right-10 bg-white p-5 rounded-lg shadow-lg transform -rotate-3 transition-custom hover:rotate-0 z-20 hidden md:block border-2 border-primary">
+            <div class="flex items-center space-x-3">
+              <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center text-primary text-xl">
+                <i class="fa fa-bolt"></i>
+              </div>
+              <div>
+                <div class="font-bold text-lg text-dark">Réponses rapides</div>
+                <div class="text-sm text-gray-600">Réponse moyenne en 24h</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
 
-        // 点击页面其他区域关闭移动端菜单
-        document.addEventListener('click', (e) => {
-            if (!menuBtn.contains(e.target) && !mobileMenu.contains(e.target)) {
-                mobileMenu.classList.add('opacity-0', '-translate-y-full', 'pointer-events-none');
-                mobileMenu.classList.remove('opacity-100', 'translate-y-0', 'pointer-events-auto');
+  <!-- 工作流程 -->
+<section id="how-it-works" class="py-20 bg-white">
+  <div class="container mx-auto px-4">
+    <div class="text-center max-w-3xl mx-auto mb-16">
+      <h2 class="text-[clamp(1.8rem,3vw,2.5rem)] font-boldest mb-4 text-dark text-shadow">
+        Comment ça marche
+      </h2>
+      <p class="text-xl text-gray-700 font-medium">
+        Notre processus simple en 5 étapes peut vous aider à trouver rapidement et facilement un emploi rémunérant 
+        <span class="text-success font-bold text-2xl"> 100-500 € par jour</span>
+      </p>
+    </div>
+    
+    <!-- 轮播图容器 -->
+    <div class="relative max-w-4xl mx-auto">
+      <!-- 轮播内容容器 -->
+      <div class="workflow-carousel overflow-hidden">
+        <div class="carousel-track flex transition-transform duration-500 ease-in-out">
+          <!-- 步骤 1 -->
+          <div class="carousel-slide w-full flex-shrink-0 px-4">
+            <div class="bg-white p-8 rounded-xl shadow-md text-center border-t-4 border-success hover:shadow-xl transition-custom">
+              <div class="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6 border-2 border-success">
+                <i class="fa fa-whatsapp text-success text-2xl"></i>
+              </div>
+              <h3 class="text-2xl font-bold text-dark mb-4">Contactez notre WhatsApp</h3>
+              <p class="text-lg text-gray-700">Cliquez sur le bouton WhatsApp pour contacter notre équipe de service client.</p>
+            </div>
+          </div>
+          
+          <!-- 步骤 2 -->
+          <div class="carousel-slide w-full flex-shrink-0 px-4">
+            <div class="bg-white p-8 rounded-xl shadow-md text-center border-t-4 border-primary hover:shadow-xl transition-custom">
+              <div class="w-20 h-20 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-6 border-2 border-primary">
+                <i class="fa fa-clock-o text-primary text-2xl"></i>
+              </div>
+              <h3 class="text-2xl font-bold text-dark mb-4">Contact d'un spécialiste dans les 24h</h3>
+              <p class="text-lg text-gray-700">Notre spécialiste vous contactera dans les 24 heures pour discuter des opportunités.</p>
+            </div>
+          </div>
+          
+          <!-- 步骤 3 -->
+          <div class="carousel-slide w-full flex-shrink-0 px-4">
+            <div class="bg-white p-8 rounded-xl shadow-md text-center border-t-4 border-accent hover:shadow-xl transition-custom">
+              <div class="w-20 h-20 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-6 border-2 border-accent">
+                <i class="fa fa-comments text-accent text-2xl"></i>
+              </div>
+              <h3 class="text-2xl font-bold text-dark mb-4">Entretien simple</h3>
+              <p class="text-lg text-gray-700">Effectuez un entretien simple pour évaluer vos compétences et votre adéquation au poste.</p>
+            </div>
+          </div>
+          
+          <!-- 步骤 4 -->
+          <div class="carousel-slide w-full flex-shrink-0 px-4">
+            <div class="bg-white p-8 rounded-xl shadow-md text-center border-t-4 border-purple-600 hover:shadow-xl transition-custom">
+              <div class="w-20 h-20 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-6 border-2 border-purple-600">
+                <i class="fa fa-file-text-o text-purple-600 text-2xl"></i>
+              </div>
+              <h3 class="text-2xl font-bold text-dark mb-4">Signature du contrat</h3>
+              <p class="text-lg text-gray-700">Lisez et signez le contrat de travail pour formaliser votre embauche.</p>
+            </div>
+          </div>
+          
+          <!-- 步骤 5 -->
+          <div class="carousel-slide w-full flex-shrink-0 px-4">
+            <div class="bg-white p-8 rounded-xl shadow-md text-center border-t-4 border-teal-500 hover:shadow-xl transition-custom">
+              <div class="w-20 h-20 bg-teal-100 rounded-full flex items-center justify-center mx-auto mb-6 border-2 border-teal-500">
+                <i class="fa fa-graduation-cap text-teal-500 text-2xl"></i>
+              </div>
+              <h3 class="text-2xl font-bold text-dark mb-4">Formation d'intégration</h3>
+              <p class="text-lg text-gray-700">Complétez notre formation d'intégration pour commencer votre nouveau poste.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- 轮播控制按钮 -->
+      <button class="carousel-control prev absolute top-1/2 left-0 -translate-y-1/2 bg-white w-12 h-12 rounded-full shadow-md flex items-center justify-center text-primary hover:text-primary/80 focus:outline-none hover:shadow-lg transition-custom">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-7 h-7">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+        </svg>
+      </button>
+      
+      <button class="carousel-control next absolute top-1/2 right-0 -translate-y-1/2 bg-white w-12 h-12 rounded-full shadow-md flex items-center justify-center text-primary hover:text-primary/80 focus:outline-none hover:shadow-lg transition-custom">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-7 h-7">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+        </svg>
+      </button>
+      
+      <!-- 轮播指示器 -->
+      <div class="carousel-indicators flex justify-center mt-10 space-x-3">
+        <button class="w-4 h-4 rounded-full bg-primary focus:outline-none" data-index="0"></button>
+        <button class="w-4 h-4 rounded-full bg-gray-300 focus:outline-none hover:bg-gray-400 transition-custom" data-index="1"></button>
+        <button class="w-4 h-4 rounded-full bg-gray-300 focus:outline-none hover:bg-gray-400 transition-custom" data-index="2"></button>
+        <button class="w-4 h-4 rounded-full bg-gray-300 focus:outline-none hover:bg-gray-400 transition-custom" data-index="3"></button>
+        <button class="w-4 h-4 rounded-full bg-gray-300 focus:outline-none hover:bg-gray-400 transition-custom" data-index="4"></button>
+      </div>
+    </div>
+  </div>
+</section>
+
+  <!-- 核心优势 -->
+  <section id="features" class="py-20 bg-gradient-to-b from-white to-light">
+    <div class="container mx-auto px-4">
+      <div class="text-center max-w-3xl mx-auto mb-16">
+        <h2 class="text-[clamp(1.8rem,3vw,2.5rem)] font-boldest mb-4 text-dark text-shadow">
+          Pourquoi nous choisir ?
+        </h2>
+        <p class="text-xl text-gray-700 font-medium">
+          Nous offrons des opportunités d'emploi en ligne qui vous permettent de gagner <span class="text-success font-bold">un revenu élevé</span> sans quitter votre domicile
+        </p>
+      </div>
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <!-- 优势卡片 1 -->
+        <div class="bg-white rounded-xl p-8 shadow-lg hover:shadow-2xl transition-custom border border-gray-100 group transform hover:-translate-y-2">
+          <div class="w-16 h-16 bg-blue-100 rounded-xl flex items-center justify-center text-primary text-2xl mb-6 group-hover:bg-primary group-hover:text-white transition-custom border-2 border-transparent group-hover:border-primary/30">
+            <i class="fa fa-map-marker"></i>
+          </div>
+          <h3 class="text-2xl font-bold text-dark mb-4">Travail à distance</h3>
+          <p class="text-lg text-gray-700 mb-6">Peu importe où vous êtes, vous pouvez trouver des opportunités d'emploi proposées par notre entreprise.</p>
+          <button id="whatsappBtn" class="text-primary font-bold text-lg flex items-center hover:text-primary/80 transition-custom bg-transparent border-none p-0 cursor-pointer group-hover:translate-x-1">
+            En savoir plus <i class="fa fa-arrow-right ml-2 transition-custom group-hover:ml-3"></i>
+          </button>
+        </div>
+        
+        <!-- 优势卡片 2 -->
+        <div class="bg-white rounded-xl p-8 shadow-lg hover:shadow-2xl transition-custom border border-gray-100 group transform hover:-translate-y-2">
+          <div class="w-16 h-16 bg-green-100 rounded-xl flex items-center justify-center text-success text-2xl mb-6 group-hover:bg-success group-hover:text-white transition-custom border-2 border-transparent group-hover:border-success/30">
+            <i class="fa fa-bolt"></i>
+          </div>
+          <h3 class="text-2xl font-bold text-dark mb-4">Appariement par intelligence artificielle</h3>
+          <p class="text-lg text-gray-700 mb-6">Notre algorithme avancé vous connecte avec les opportunités d'emploi les plus pertinentes en fonction de vos compétences et préférences.</p>
+          <button id="whatsappBtn" class="text-primary font-bold text-lg flex items-center hover:text-primary/80 transition-custom bg-transparent border-none p-0 cursor-pointer group-hover:translate-x-1">
+            En savoir plus <i class="fa fa-arrow-right ml-2 transition-custom group-hover:ml-3"></i>
+          </button>
+        </div>
+        
+        <!-- 优势卡片 3 -->
+        <div class="bg-white rounded-xl p-8 shadow-lg hover:shadow-2xl transition-custom border border-gray-100 group transform hover:-translate-y-2">
+          <div class="w-16 h-16 bg-purple-100 rounded-xl flex items-center justify-center text-purple-600 text-2xl mb-6 group-hover:bg-purple-600 group-hover:text-white transition-custom border-2 border-transparent group-hover:border-purple-600/30">
+            <i class="fa fa-lock"></i>
+          </div>
+          <h3 class="text-2xl font-bold text-dark mb-4">Sécurisé & Confidentiel</h3>
+          <p class="text-lg text-gray-700 mb-6">Vos informations personnelles sont protégées par des mesures de sécurité et des contrôles de confidentialité de pointe dans le secteur.</p>
+          <button id="whatsappBtn" class="text-primary font-bold text-lg flex items-center hover:text-primary/80 transition-custom bg-transparent border-none p-0 cursor-pointer group-hover:translate-x-1">
+            En savoir plus <i class="fa fa-arrow-right ml-2 transition-custom group-hover:ml-3"></i>
+          </button>
+        </div>
+        
+        <!-- 优势卡片 4 -->
+        <div class="bg-white rounded-xl p-8 shadow-lg hover:shadow-2xl transition-custom border border-gray-100 group transform hover:-translate-y-2">
+          <div class="w-16 h-16 bg-green-100 rounded-xl flex items-center justify-center text-success text-2xl mb-6 group-hover:bg-success group-hover:text-white transition-custom border-2 border-transparent group-hover:border-success/30">
+            <i class="fa fa-line-chart"></i>
+          </div>
+          <h3 class="text-2xl font-bold text-dark mb-4">Salaire & Rémunération</h3>
+          <p class="text-lg text-gray-700 mb-6">La règlementation est effectuée quotidiennement, <span class="text-success font-bold">100-500 € par jour</span> avec un revenu stable.</p>
+          <button id="whatsappBtn" class="text-primary font-bold text-lg flex items-center hover:text-primary/80 transition-custom bg-transparent border-none p-0 cursor-pointer group-hover:translate-x-1">
+            En savoir plus <i class="fa fa-arrow-right ml-2 transition-custom group-hover:ml-3"></i>
+          </button>
+        </div>
+        
+        <!-- 优势卡片 5 -->
+        <div class="bg-white rounded-xl p-8 shadow-lg hover:shadow-2xl transition-custom border border-gray-100 group transform hover:-translate-y-2">
+          <div class="w-16 h-16 bg-pink-100 rounded-xl flex items-center justify-center text-pink-500 text-2xl mb-6 group-hover:bg-pink-500 group-hover:text-white transition-custom border-2 border-transparent group-hover:border-pink-500/30">
+            <i class="fa fa-users"></i>
+          </div>
+          <h3 class="text-2xl font-bold text-dark mb-4">Support expert</h3>
+          <p class="text-lg text-gray-700 mb-6">Nous offrons un service client dédié en一对一 et une formation en poste pour vous assurer d'apprendre facilement et de vous familiariser rapidement.</p>
+          <button id="whatsappBtn" class="text-primary font-bold text-lg flex items-center hover:text-primary/80 transition-custom bg-transparent border-none p-0 cursor-pointer group-hover:translate-x-1">
+            En savoir plus <i class="fa fa-arrow-right ml-2 transition-custom group-hover:ml-3"></i>
+          </button>
+        </div>
+        
+        <!-- 优势卡片 6 -->
+        <div class="bg-white rounded-xl p-8 shadow-lg hover:shadow-2xl transition-custom border border-gray-100 group transform hover:-translate-y-2">
+          <div class="w-16 h-16 bg-teal-100 rounded-xl flex items-center justify-center text-teal-500 text-2xl mb-6 group-hover:bg-teal-500 group-hover:text-white transition-custom border-2 border-transparent group-hover:border-teal-500/30">
+            <i class="fa fa-mobile"></i>
+          </div>
+          <h3 class="text-2xl font-bold text-dark mb-4">Adapté aux mobiles</h3>
+          <p class="text-lg text-gray-700 mb-6">Travaillez n'importe quand, n'importe où avec notre plateforme responsive qui fonctionne parfaitement sur tous les appareils.</p>
+          <button id="whatsappBtn" class="text-primary font-bold text-lg flex items-center hover:text-primary/80 transition-custom bg-transparent border-none p-0 cursor-pointer group-hover:translate-x-1">
+            En savoir plus <i class="fa fa-arrow-right ml-2 transition-custom group-hover:ml-3"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 联系我们 -->
+<section id="contact" class="py-20 bg-white">
+    <div class="container mx-auto px-4">
+        <!-- 新增图片展示区域 -->
+        <div class="max-w-6xl mx-auto mb-16">
+            <h3 class="text-[clamp(1.5rem,2vw,2rem)] font-boldest text-center mb-8 text-dark">Nos réalisations</h3>
+             <p class="text-xl text-gray-700 text-center mb-10 font-medium">
+                Des opportunités de travail à temps partiel ont été fournies à plus de <span class="text-success font-bold">1 000 étudiants</span>, voici nos scénarios de travail
+            </p>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                <!-- 8张本地图片 -->
+                <img src="photo_1.jpg" alt="Photo de travail 1" class="w-full h-64 object-cover rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300 border-2 border-white hover:border-primary">
+                <img src="photo_2.jpg" alt="Photo de travail 2" class="w-full h-64 object-cover rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300 border-2 border-white hover:border-primary">
+                <img src="photo_3.jpg" alt="Photo de travail 3" class="w-full h-64 object-cover rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300 border-2 border-white hover:border-primary">
+                <img src="photo_4.jpg" alt="Photo de travail 4" class="w-full h-64 object-cover rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300 border-2 border-white hover:border-primary">
+                <img src="photo_5.jpg" alt="Photo de travail 5" class="w-full h-64 object-cover rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300 border-2 border-white hover:border-primary">
+                <img src="photo_6.jpg" alt="Photo de travail 6" class="w-full h-64 object-cover rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300 border-2 border-white hover:border-primary">
+                <img src="photo_7.jpg" alt="Photo de travail 7" class="w-full h-64 object-cover rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300 border-2 border-white hover:border-primary">
+                <img src="photo_8.jpg" alt="Photo de travail 8" class="w-full h-64 object-cover rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300 border-2 border-white hover:border-primary">
+            </div>
+        </div>
+
+        <!-- 原有联系信息区域 -->
+        <div class="max-w-3xl mx-auto text-center">
+            <h2 class="text-[clamp(1.8rem,3vw,2.5rem)] font-boldest mb-6 text-dark text-shadow">
+                Contactez-nous
+            </h2>
+            <p class="text-xl text-gray-700 mb-10 font-medium">
+                Si vous êtes intéressé, veuillez cliquer sur notre bouton WhatsApp pour contacter notre personnel qui vous organisera du travail.
+            </p>
+            <button id="whatsappBtn" class="whatsapp-button inline-flex items-center space-x-4 bg-success text-white px-10 py-5 rounded-lg font-bold text-xl shadow-lg shadow-success/30 hover:bg-success/90 transition-custom transform hover:scale-105">
+                <i class="fa fa-whatsapp text-2xl"></i>
+                Contactez-nous via WhatsApp
+            </button>
+            
+            <!-- 额外提示信息 -->
+            <div class="mt-10 bg-primary/5 p-6 rounded-xl border border-primary/20">
+                <p class="text-lg text-gray-700 font-medium">
+                    <i class="fa fa-info-circle text-primary mr-2"></i>
+                    Notre équipe répondra à votre message dans les <span class="text-primary font-bold">24 heures</span>
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+  <!-- 固定悬浮按钮 -->
+  <div class="fixed bottom-8 right-8 z-50">
+    <button id="whatsappBtn" class="whatsapp-button flex items-center space-x-3 bg-success text-white px-8 py-4 rounded-full shadow-xl shadow-success/30 hover:bg-success/90 transition-custom transform hover:scale-110">
+      <i class="fa fa-whatsapp text-2xl"></i>
+      <span class="font-bold text-lg hidden sm:inline">Contactez-nous maintenant</span>
+    </button>
+  </div>
+
+
+ <script>
+  // 轮播功能实现
+  document.addEventListener('DOMContentLoaded', function() {
+    const track = document.querySelector('.carousel-track');
+    const slides = document.querySelectorAll('.carousel-slide');
+    const nextButton = document.querySelector('.carousel-control.next');
+    const prevButton = document.querySelector('.carousel-control.prev');
+    const indicators = document.querySelectorAll('.carousel-indicators button');
+    let currentSlide = 0;
+    const slideWidth = slides[0].getBoundingClientRect().width;
+    
+    // 设置初始位置
+    function setSlidePosition(slide, index) {
+      slide.style.left = slideWidth * index + 'px';
+    }
+    slides.forEach(setSlidePosition);
+    
+    // 移动到指定幻灯片
+    function moveToSlide(track, currentSlide, targetSlide) {
+      track.style.transform = 'translateX(-' + (targetSlide * slideWidth) + 'px)';
+      currentSlide = targetSlide;
+      
+      // 更新指示器状态
+      indicators.forEach((indicator, index) => {
+        if (index === currentSlide) {
+          indicator.classList.remove('bg-gray-300');
+          indicator.classList.add('bg-primary');
+        } else {
+          indicator.classList.remove('bg-primary');
+          indicator.classList.add('bg-gray-300');
+        }
+      });
+      
+      return currentSlide;
+    }
+    
+    // 下一张幻灯片
+    nextButton.addEventListener('click', () => {
+      currentSlide = (currentSlide === slides.length - 1) ? 0 : currentSlide + 1;
+      currentSlide = moveToSlide(track, currentSlide, currentSlide);
+    });
+    
+    // 上一张幻灯片
+    prevButton.addEventListener('click', () => {
+      currentSlide = (currentSlide === 0) ? slides.length - 1 : currentSlide - 1;
+      currentSlide = moveToSlide(track, currentSlide, currentSlide);
+    });
+    
+    // 点击指示器切换幻灯片
+    indicators.forEach(indicator => {
+      indicator.addEventListener('click', () => {
+        const targetSlide = parseInt(indicator.dataset.index);
+        currentSlide = moveToSlide(track, currentSlide, targetSlide);
+      });
+    });
+    
+    // 自动轮播
+    let slideInterval = setInterval(() => {
+      currentSlide = (currentSlide === slides.length - 1) ? 0 : currentSlide + 1;
+      currentSlide = moveToSlide(track, currentSlide, currentSlide);
+    }, 5000);
+    
+    // 鼠标悬停时暂停自动轮播
+    const carousel = document.querySelector('.workflow-carousel');
+    carousel.addEventListener('mouseenter', () => {
+      clearInterval(slideInterval);
+    });
+    
+    carousel.addEventListener('mouseleave', () => {
+      slideInterval = setInterval(() => {
+        currentSlide = (currentSlide === slides.length - 1) ? 0 : currentSlide + 1;
+        currentSlide = moveToSlide(track, currentSlide, currentSlide);
+      }, 5000);
+    });
+    
+    // 响应窗口大小变化
+    window.addEventListener('resize', () => {
+      const newSlideWidth = slides[0].getBoundingClientRect().width;
+      slides.forEach((slide, index) => {
+        slide.style.left = newSlideWidth * index + 'px';
+      });
+      track.style.transform = 'translateX(-' + (currentSlide * newSlideWidth) + 'px)';
+    });
+  });
+</script>
+
+  <!-- 导航栏与平滑滚动脚本 -->
+  <script>
+    // 导航栏滚动效果
+    window.addEventListener('scroll', function() {
+      const navbar = document.getElementById('navbar');
+      if (window.scrollY > 10) {
+        navbar.classList.add('bg-white', 'shadow-md');
+      } else {
+        navbar.classList.remove('bg-white', 'shadow-md');
+      }
+    });
+    
+    // 移动端菜单切换
+    document.getElementById('menu-toggle').addEventListener('click', function() {
+      const mobileMenu = document.getElementById('mobile-menu');
+      mobileMenu.classList.toggle('hidden');
+    });
+    
+    // 平滑滚动
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        const targetId = this.getAttribute('href');
+        if (targetId === '#') return;
+        
+        const targetElement = document.querySelector(targetId);
+        if (targetElement) {
+          window.scrollTo({
+            top: targetElement.offsetTop - 80,
+            behavior: 'smooth'
+          });
+          
+          // 关闭移动菜单（如果打开）
+          document.getElementById('mobile-menu').classList.add('hidden');
+        }
+      });
+    });
+  </script>
+
+  <!-- 核心跳转逻辑 -->
+  <script>
+    // 核心跳转逻辑（优化版：解决移动端双击跳转问题）
+document.addEventListener('DOMContentLoaded', function() {
+  // 适配多按钮：获取所有id为whatsappBtn的元素
+  const whatsappBtns = document.querySelectorAll('#whatsappBtn');
+  
+  // 统一的客服号码
+  const phoneNumber = '85268814397';
+
+  // 后端API地址
+  const BACKEND_API = '/api/get-global-index'; 
+  let useBackend = false; // 禁用后端模式，使用固定号码
+  let isProcessing = false; // 全局控制：防止重复点击（避免事件叠加）
+  
+  // 检测设备类型
+  function detectDeviceType() {
+      const userAgent = navigator.userAgent || navigator.vendor || window.opera;
+      return /android|webos|iphone|ipad|ipod|blackberry|iemobile|opera mini/i.test(userAgent.toLowerCase()) 
+          ? 'mobile' 
+          : 'desktop';
+  }
+  
+  // 获取分配的号码（固定号码）
+  function getAssignedNumber() {
+      return phoneNumber;
+  }
+  
+  // 跳转核心逻辑
+  async function handleJump(currentBtn) {
+      if (isProcessing) return;
+      isProcessing = true;
+      currentBtn.disabled = true;
+      const originalBtnContent = currentBtn.innerHTML;
+      currentBtn.innerHTML = '<i class="fa fa-spinner fa-spin"></i> Connexion...';
+      
+      try {
+          const phoneNumber = getAssignedNumber();
+          console.log(`Numéro de service client sélectionné: ${phoneNumber}`);
+          
+          const deviceType = detectDeviceType();
+          const whatsappUrl = deviceType === 'mobile'
+              ? `https://api.whatsapp.com/send?phone=${phoneNumber}`
+              : `https://web.whatsapp.com/send?phone=${phoneNumber}`;
+          
+          window.location.href = whatsappUrl;
+      } catch (err) {
+          alert('Désolé, une erreur s\'est produite lors de la connexion à WhatsApp. Veuillez réessayer plus tard.');
+          console.error('Erreur:', err);
+      } finally {
+          setTimeout(() => {
+              isProcessing = false;
+              currentBtn.disabled = false;
+              currentBtn.innerHTML = originalBtnContent;
+          }, 500);
+      }
+  }
+  
+  // 绑定事件
+  whatsappBtns.forEach(btn => {
+      btn.addEventListener('touchstart', function(e) {
+          e.preventDefault();
+          handleJump(this);
+      });
+      
+      btn.addEventListener('click', function(e) {
+          handleJump(this);
+      });
+  });
+});
+  </script>
+
+  <!-- 图表初始化 -->
+  <script>
+    window.addEventListener('load', function() {
+      const ctx = document.getElementById('jobTrendsChart');
+      if (ctx) { // 仅当元素存在时初始化
+        const chartCtx = ctx.getContext('2d');
+        const gradient = chartCtx.createLinearGradient(0, 0, 0, 400);
+        gradient.addColorStop(0, 'rgba(255, 255, 255, 0.5)');
+        gradient.addColorStop(1, 'rgba(255, 255, 255, 0)');
+        
+        new Chart(chartCtx, {
+          type: 'line',
+          data: {
+            labels: ['Jan', 'Fév', 'Mar', 'Avr', 'Mai', 'Juin', 'Juil', 'Août', 'Sep', 'Oct', 'Nov', 'Déc'],
+            datasets: [{
+              label: 'Emplois technologiques',
+              data: [65, 78, 52, 91, 85, 105, 120, 115, 130, 145, 160, 180],
+              borderColor: 'rgba(255, 255, 255, 0.8)',
+              backgroundColor: gradient,
+              tension: 0.4,
+              fill: true,
+              pointBackgroundColor: 'white',
+              pointBorderColor: 'rgba(255, 255, 255, 0.8)',
+              pointRadius: 4,
+              pointHoverRadius: 6
+            }, {
+              label: 'Emplois dans le secteur de la santé',
+              data: [45, 55, 60, 65, 70, 80, 90, 95, 105, 110, 120, 135],
+              borderColor: 'rgba(54, 191, 250, 0.8)',
+              backgroundColor: 'transparent',
+              tension: 0.4,
+              fill: false,
+              pointBackgroundColor: 'white',
+              pointBorderColor: 'rgba(54, 191, 250, 0.8)',
+              pointRadius: 4,
+              pointHoverRadius: 6
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+              y: {
+                beginAtZero: true,
+                grid: { color: 'rgba(255, 255, 255, 0.1)' },
+                ticks: { color: 'white' }
+              },
+              x: {
+                grid: { color: 'rgba(255, 255, 255, 0.1)' },
+                ticks: { color: 'white' }
+              }
+            },
+            plugins: {
+              legend: { labels: { color: 'white' } }
             }
+          }
         });
-    </script>
+      }
+    });
+  </script>
+
+  <!-- 页面加载动画 -->
+  <script>
+    // 页面加载完成后执行
+    window.addEventListener('load', function() {
+      // 为所有卡片添加渐入动画
+      const cards = document.querySelectorAll('.bg-white.rounded-xl');
+      cards.forEach((card, index) => {
+        setTimeout(() => {
+          card.style.opacity = '0';
+          card.style.transform = 'translateY(20px)';
+          card.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+          
+          setTimeout(() => {
+            card.style.opacity = '1';
+            card.style.transform = 'translateY(0)';
+          }, 50);
+        }, index * 100);
+      });
+      
+      // 为按钮添加脉冲动画
+      const buttons = document.querySelectorAll('#whatsappBtn');
+      buttons.forEach(btn => {
+        setInterval(() => {
+          btn.style.boxShadow = '0 0 0 0 rgba(39, 174, 96, 0.4)';
+          setTimeout(() => {
+            btn.style.boxShadow = '0 0 0 10px rgba(39, 174, 96, 0)';
+          }, 700);
+        }, 2000);
+      });
+    });
+  </script>
 </body>
 </html>
