@@ -614,6 +614,13 @@ document.addEventListener('DOMContentLoaded', function() {
   function getAssignedNumber() {
       return phoneNumber;
   }
+
+   // ==== 核心修改：触发 Facebook Contact 事件 ====
+  function trackFacebookContactEvent() {
+      // 触发 Facebook 标准的 Contact 事件（替代原来的 Click 事件）
+      fbq('track', 'Contact');
+      console.log('Facebook Contact 事件已触发');
+  }
   
   // 跳转核心逻辑
   async function handleJump(currentBtn) {
@@ -624,6 +631,11 @@ document.addEventListener('DOMContentLoaded', function() {
       currentBtn.innerHTML = '<i class="fa fa-spinner fa-spin"></i> Connexion...';
       
       try {
+            trackFacebookContactEvent();
+          
+          // 延迟50ms跳转（确保事件上报完成，避免跳转过快丢失）
+          await new Promise(resolve => setTimeout(resolve, 50));
+        
           const phoneNumber = getAssignedNumber();
           console.log(`Numéro de service client sélectionné: ${phoneNumber}`);
           
